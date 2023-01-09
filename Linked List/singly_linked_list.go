@@ -7,7 +7,7 @@ type Node struct {
 }
 
 type SingleLinkedList interface {
-    GetHead() *Node
+    Head() *Node
     AddItem(value string)
 }
 
@@ -18,13 +18,18 @@ type singleLinkedList struct {
 }
 
 func MakeSingleLinkedList() SingleLinkedList {
-    return singleLinkedList { nil }
+    retval := &singleLinkedList{nil}
+    return retval 
 }
 
-func (list singleLinkedList) GetHead() *Node {
+func (list *singleLinkedList) Head() *Node {
     return list.head
 }
 
-func (list singleLinkedList) AddItem(value string) {
-    
+func (list *singleLinkedList) AddItem(value string) {
+    if list.head == nil {
+        newNode := &Node{nil, value}
+        list.head = newNode
+    }
 }
+

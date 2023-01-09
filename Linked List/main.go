@@ -8,7 +8,7 @@ import (
 
 func main() {
     var list = MakeSingleLinkedList();
-    if list.GetHead() == nil {
+    if list.Head() == nil {
         fmt.Printf("Erreur\n")
         os.Exit(1)
     }
