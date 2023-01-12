@@ -13,6 +13,8 @@ type SingleLinkedList interface {
     Count() int
     GetNode(index int) (*Node, error)
     AddNode(value string)
+    InsertNode(index int, value string) error
+    Clear()
 }
 
 // Singly linked list: a type of linked list in which each node has only one 
@@ -54,8 +56,42 @@ func (list *singleLinkedList) AddNode(value string) {
     list.nodeCount++
 }
 
-func (list *singleLinkedList) insertNode(index int, value string) error {
-    return errors.New("To implement")
+func (list *singleLinkedList) InsertNode(index int, value string) error {
+    if index < 0 || index > list.nodeCount {
+        return errors.New("Index out of range")
+    }
+    var nodeAtInsertPosition *Node = nil
+    if index >= 0 && index < list.nodeCount {
+        nodeAtInsertPosition, _ = list.fetchNode(index)
+        if nodeAtInsertPosition == nil {
+            return errors.New("Index out of range")
+        }
+    }
+    nodeBeforeInsertPosition, _ := list.fetchNode(index - 1)
+    if nodeAtInsertPosition == nil {
+        newNode := &Node{nodeAtInsertPosition, value}
+        if index == 0 {
+            list.head = newNode
+        } else {
+            nodeBeforeInsertPosition.next = newNode
+        }
+        list.nodeCount++
+        return nil
+    } else {
+        newNode := &Node{nodeAtInsertPosition, value}
+        if nodeBeforeInsertPosition != nil {
+            nodeBeforeInsertPosition.next = newNode
+        } else {
+            list.head = newNode
+        }
+        list.nodeCount++
+        return nil
+    }
+}
+
+func (list *singleLinkedList) Clear() {
+    list.head = nil
+    list.nodeCount = 0
 }
 
 func (list *singleLinkedList) fetchNode(index int) (*Node, error) {
