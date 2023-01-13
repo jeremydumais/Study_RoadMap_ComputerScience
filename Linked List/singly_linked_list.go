@@ -61,11 +61,8 @@ func (list *singleLinkedList) InsertNode(index int, value string) error {
         return errors.New("Index out of range")
     }
     var nodeAtInsertPosition *Node = nil
-    if index >= 0 && index < list.nodeCount {
+    if index < list.nodeCount {
         nodeAtInsertPosition, _ = list.fetchNode(index)
-        if nodeAtInsertPosition == nil {
-            return errors.New("Index out of range")
-        }
     }
     nodeBeforeInsertPosition, _ := list.fetchNode(index - 1)
     if nodeAtInsertPosition == nil {
