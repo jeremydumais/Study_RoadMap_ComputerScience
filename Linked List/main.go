@@ -1,4 +1,4 @@
-//This is a comment
+// A demo of multiple forms of linked list
 package main
 
 import ( 
