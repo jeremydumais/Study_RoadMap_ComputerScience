@@ -12,7 +12,7 @@ Learning Go Lang at the same time.
 &#9745; Array
 
 &#9744; Linked List
-- &#9744; Singly Linked List
+- &#9745; Singly Linked List
 - &#9744; Doubly Linked List
 - &#9744; Circular Linked List
 - &#9744; Circular Doubly Linked List
