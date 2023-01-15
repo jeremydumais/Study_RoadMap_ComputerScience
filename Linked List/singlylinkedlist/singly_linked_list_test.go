@@ -174,6 +174,63 @@ func TestSinglyLinkedList_InsertNodeBeforeAtIndexOneTwoItemsList_ReturnSuccess(t
     assert.Equal(t, "Test2", actual.Head().Next.Next.Value)
 }
 
+func TestSinglyLinkedList_InsertNodeAfterAtIndexZeroEmptyList_ReturnError(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    err := actual.InsertNodeAfter(0, "Test")
+    assert.NotNil(t, err)
+    assert.Equal(t, "index out of range", err.Error())
+}
+
+func TestSinglyLinkedList_InsertNodeAfterAtIndexOneEmptyList_ReturnError(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    err := actual.InsertNodeAfter(1, "Test")
+    assert.NotNil(t, err)
+    assert.Equal(t, "index out of range", err.Error())
+}
+
+func TestSinglyLinkedList_InsertNodeAfterAtIndexZeroOneItemList_ReturnSuccess(t *testing.T) {
+    actual := getListOfElements(1)
+    err := actual.InsertNodeAfter(0, "Another")
+    assert.Nil(t, err)
+    assert.Equal(t, 2, actual.Count())
+    assert.Equal(t, "Test1", actual.Head().Value)
+    assert.Equal(t, "Another", actual.Head().Next.Value)
+}
+
+func TestSinglyLinkedList_InsertNodeAfterAtIndexOneOneItemList_ReturnError(t *testing.T) {
+    actual := getListOfElements(1)
+    err := actual.InsertNodeAfter(1, "Another")
+    assert.NotNil(t, err)
+    assert.Equal(t, "index out of range", err.Error())
+}
+
+func TestSinglyLinkedList_InsertNodeAfterAtIndexTwoOneList_ReturnError(t *testing.T) {
+    actual := getListOfElements(1)
+    err := actual.InsertNodeAfter(2, "Test")
+    assert.NotNil(t, err)
+    assert.Equal(t, "index out of range", err.Error())
+}
+
+func TestSinglyLinkedList_InsertNodeAfterAtIndexZeroTwoItemsList_ReturnSuccess(t *testing.T) {
+    actual := getListOfElements(2)
+    err := actual.InsertNodeAfter(0, "Another")
+    assert.Nil(t, err)
+    assert.Equal(t, 3, actual.Count())
+    assert.Equal(t, "Test1", actual.Head().Value)
+    assert.Equal(t, "Another", actual.Head().Next.Value)
+    assert.Equal(t, "Test2", actual.Head().Next.Next.Value)
+}
+
+func TestSinglyLinkedList_InsertNodeAfterAtIndexOneTwoItemsList_ReturnSuccess(t *testing.T) {
+    actual := getListOfElements(2)
+    err := actual.InsertNodeAfter(1, "Another")
+    assert.Nil(t, err)
+    assert.Equal(t, 3, actual.Count())
+    assert.Equal(t, "Test1", actual.Head().Value)
+    assert.Equal(t, "Test2", actual.Head().Next.Value)
+    assert.Equal(t, "Another", actual.Head().Next.Next.Value)
+}
+
 func TestSinglyLinkedList_RemoveNode_AtIndexZeroWithEmptyList_ReturnError(t *testing.T) {
     actual := MakeSingleLinkedList()
     err := actual.RemoveNode(0)
@@ -249,5 +306,81 @@ func TestSinglyLinkedList_Clear_ThreeItemsList_ReturnSuccess(t *testing.T) {
     actual.Clear()
     assert.Equal(t, 0, actual.Count())
     assert.Nil(t, actual.Head())
+}
+
+func TestSinglyLinkedList_PopFront_EmptyList_ReturnError(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    err := actual.PopFront()
+    assert.NotNil(t, err)
+    assert.Equal(t, "the list is empty", err.Error())
+}
+
+func TestSinglyLinkedList_PopFront_OneItemList_ReturnSuccess(t *testing.T) {
+    actual := getListOfElements(1)
+    err := actual.PopFront()
+    assert.Nil(t, err)
+    assert.True(t, actual.Empty())
+}
+
+func TestSinglyLinkedList_PopFront_TwoItemList_ReturnSuccess(t *testing.T) {
+    actual := getListOfElements(2)
+    err := actual.PopFront()
+    assert.Nil(t, err)
+    assert.False(t, actual.Empty())
+    assert.Equal(t, "Test2", actual.Head().Value)
+}
+
+func TestSinglyLinkedList_Unique_WithEmptyList_ReturnSuccess(t *testing.T) {
+    list := MakeSingleLinkedList()
+    list.Unique()
+    assert.True(t, list.Empty())
+}
+
+func TestSinglyLinkedList_Unique_WithOneItemList_ReturnSuccess(t *testing.T) {
+    list := getListOfElements(1)
+    list.Unique()
+    assert.Equal(t, 1, list.Count())
+}
+
+func TestSinglyLinkedList_Unique_WithTwoDifferentItemsList_ReturnSuccess(t *testing.T) {
+    list := getListOfElements(2)
+    list.Unique()
+    assert.Equal(t, 2, list.Count())
+}
+
+func TestSinglyLinkedList_Unique_WithTwoSameItemList_ReturnSuccess(t *testing.T) {
+    list := MakeSingleLinkedList()
+    list.AddNode("Test")
+    list.AddNode("Test")
+    list.Unique()
+    assert.Equal(t, 1, list.Count())
+    assert.Equal(t, "Test", list.Head().Value)
+}
+
+func TestSinglyLinkedList_Unique_WithTwoSameItemTwoTimesList_ReturnSuccess(t *testing.T) {
+    list := MakeSingleLinkedList()
+    list.AddNode("Test")
+    list.AddNode("Test")
+    list.AddNode("Hello")
+    list.AddNode("Hello")
+    list.Unique()
+    assert.Equal(t, 2, list.Count())
+    assert.Equal(t, "Test", list.Head().Value)
+    assert.Equal(t, "Hello", list.Head().Next.Value)
+}
+
+func TestSinglyLinkedList_Unique_WithTwoSameItemOneDiffAndThreeTimesList_ReturnSuccess(t *testing.T) {
+    list := MakeSingleLinkedList()
+    list.AddNode("Test")
+    list.AddNode("Test")
+    list.AddNode("Hi")
+    list.AddNode("Hello")
+    list.AddNode("Hello")
+    list.AddNode("Hello")
+    list.Unique()
+    assert.Equal(t, 3, list.Count())
+    assert.Equal(t, "Test", list.Head().Value)
+    assert.Equal(t, "Hi", list.Head().Next.Value)
+    assert.Equal(t, "Hello", list.Head().Next.Next.Value)
 }
 

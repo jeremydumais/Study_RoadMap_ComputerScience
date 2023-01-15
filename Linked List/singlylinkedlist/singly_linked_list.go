@@ -36,7 +36,8 @@ type SingleLinkedList interface {
     // Insert a new node before the element at the specified index.
     InsertNodeBefore(index int, value string) error
 
-    //TODO InsertNodeAfter(index int, value string) error
+    // Insert a new node after the element at the specified index.
+    InsertNodeAfter(index int, value string) error
 
     // Remove the node the is located at the specified index.
     RemoveNode(index int) error
@@ -44,8 +45,12 @@ type SingleLinkedList interface {
     // Remove all the elements of the list.
     Clear()
 
-    //TODO PopFront
-    //TODO Unique
+    // Remove the first element of the list.
+    PopFront() error
+
+    // Remove consecutive duplicate elements of the list.
+    Unique()
+
     //TODO Sort 
     //TODO Reverse
 }
@@ -115,6 +120,17 @@ func (list *singleLinkedList) InsertNodeBefore(index int, value string) error {
     list.bindNewNode(nodeBeforeInsertPosition, newNode, nodeAtInsertPosition)
     return nil
 }
+    
+func (list *singleLinkedList) InsertNodeAfter(index int, value string) error {
+    nodeAtInsertPosition, err := list.fetchNode(index)
+    if err != nil {
+        return err
+    }
+    newNode := &Node{nil, value}
+    list.bindNewNode(nodeAtInsertPosition, newNode, nodeAtInsertPosition.Next)
+    return nil 
+}
+
 func (list *singleLinkedList) RemoveNode(index int) error {
     nodeAtIndex , err := list.fetchNode(index) 
     nodeBeforeIndex, _ := list.fetchNode(index - 1)
@@ -128,6 +144,27 @@ func (list *singleLinkedList) RemoveNode(index int) error {
 func (list *singleLinkedList) Clear() {
     list.head = nil
     list.nodeCount = 0
+}
+
+func (list *singleLinkedList) PopFront() error {
+    if list.Empty() {
+        return errors.New("the list is empty")
+    }
+    list.unbindNode(nil, list.head)
+    return nil
+}
+
+func (list *singleLinkedList) Unique() {
+    nodeBefore := list.head
+    for i := 1; i < list.nodeCount; i++ {
+        currentNode, _ := list.fetchNode(i)
+        if currentNode.Value == nodeBefore.Value {
+            list.unbindNode(nodeBefore, currentNode)
+            i--
+        } else {
+            nodeBefore = currentNode
+        }
+    }
 }
 
 func (list *singleLinkedList) bindNewNode(nodeBefore *Node, newNode *Node, nodeAfter *Node) {
