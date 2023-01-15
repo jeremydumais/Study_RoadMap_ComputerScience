@@ -1,5 +1,5 @@
-// Package singlylinkedlist contains all the objects of a singly linked list.
-package singlylinkedlist
+// Package singlelinkedlist contains all the objects of a singly linked list.
+package singlelinkedlist
 
 import (
     "errors"
@@ -12,7 +12,7 @@ type Node struct {
 	Value string
 }
 
-// SingleLinkedList is the interface to the singly linked list structure. 
+// SingleLinkedList is the interface to the single linked list structure. 
 // A single linked list is a type of linked list in which each node has only 
 // one link to the next node in the list.
 type SingleLinkedList interface {
@@ -71,7 +71,7 @@ type SingleLinkedList interface {
 	Swap(i, j int)
 }
 
-// Singly linked list: a type of linked list in which each node has only one
+// Single linked list: a type of linked list in which each node has only one
 // link to the next node in the list.
 type singleLinkedList struct {
 	head *Node

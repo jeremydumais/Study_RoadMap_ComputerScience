@@ -1,4 +1,4 @@
-package doublylinkedlist
+package doublelinkedlist
 
 // Node This represent a node item in the list.
 type Node struct {

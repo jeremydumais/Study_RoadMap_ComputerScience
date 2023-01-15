@@ -4,11 +4,11 @@ package main
 import (
 	"fmt"
 	"sort"
-	"study/linkedlistdemo/singlylinkedlist"
+	"study/linkedlistdemo/singlelinkedlist"
 )
 
 func main() {
-    var list = singlylinkedlist.MakeSingleLinkedList();
+    var list = singlelinkedlist.MakeSingleLinkedList();
     list.AddNode("ABC")
     list.AddNode("ABC")
     list.AddNode("Test")
