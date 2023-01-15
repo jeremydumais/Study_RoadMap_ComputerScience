@@ -6,7 +6,7 @@
 import "study/linkedlistdemo/singlylinkedlist"
 ```
 
-A demo of multiple forms of linked list
+Package singlylinkedlist contains all the objects of a singly linked list.
 
 ## Index
 
@@ -15,7 +15,7 @@ A demo of multiple forms of linked list
   - [func MakeSingleLinkedList() SingleLinkedList](<#func-makesinglelinkedlist>)
 
 
-## type [Node](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlylinkedlist/singly_linked_list.go#L7-L10>)
+## type [Node](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlylinkedlist/singly_linked_list.go#L10-L13>)
 
 Node This represent a node item in the list.
 
@@ -26,7 +26,7 @@ type Node struct {
 }
 ```
 
-## type [SingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlylinkedlist/singly_linked_list.go#L15-L51>)
+## type [SingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlylinkedlist/singly_linked_list.go#L18-L72>)
 
 SingleLinkedList is the interface to the singly linked list structure. A single linked list is a type of linked list in which each node has only one link to the next node in the list.
 
@@ -39,7 +39,7 @@ type SingleLinkedList interface {
     Tail() *Node
 
     // Return the number of nodes in the list.
-    Count() int
+    Len() int
 
     // Return a node at a specific index. The first element would be the index
     // zero.
@@ -55,15 +55,40 @@ type SingleLinkedList interface {
     // Insert a new node before the element at the specified index.
     InsertNodeBefore(index int, value string) error
 
+    // Insert a new node after the element at the specified index.
+    InsertNodeAfter(index int, value string) error
+
     // Remove the node the is located at the specified index.
     RemoveNode(index int) error
 
     // Remove all the elements of the list.
     Clear()
+
+    // Remove the first element of the list.
+    PopFront() error
+
+    // Remove consecutive duplicate elements of the list.
+    Unique()
+
+    // Less reports whether the element with index i
+    // must sort before the element with index j.
+    //
+    // If both Less(i, j) and Less(j, i) are false,
+    // then the elements at index i and j are considered equal.
+    // Sort may place equal elements in any order in the final result,
+    // while Stable preserves the original input order of equal elements.
+    //
+    // Less must describe a transitive ordering:
+    //  - if both Less(i, j) and Less(j, k) are true, then Less(i, k) must be true as well.
+    //  - if both Less(i, j) and Less(j, k) are false, then Less(i, k) must be false as well.
+    Less(i, j int) bool
+
+    // Swap swaps the elements with indexes i and j.
+    Swap(i, j int)
 }
 ```
 
-### func [MakeSingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlylinkedlist/singly_linked_list.go#L61>)
+### func [MakeSingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlylinkedlist/singly_linked_list.go#L82>)
 
 ```go
 func MakeSingleLinkedList() SingleLinkedList

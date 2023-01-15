@@ -1,7 +1,10 @@
 // Package singlylinkedlist contains all the objects of a singly linked list.
 package singlylinkedlist
 
-import "errors"
+import (
+    "errors"
+    //"sort"
+)
 
 // Node This represent a node item in the list.
 type Node struct {
@@ -20,7 +23,7 @@ type SingleLinkedList interface {
     Tail() *Node
 
     // Return the number of nodes in the list.
-    Count() int
+    Len() int
 
     // Return a node at a specific index. The first element would be the index
     // zero.
@@ -51,8 +54,21 @@ type SingleLinkedList interface {
     // Remove consecutive duplicate elements of the list.
     Unique()
 
-    //TODO Sort 
-    //TODO Reverse
+    // Less reports whether the element with index i
+	// must sort before the element with index j.
+	//
+	// If both Less(i, j) and Less(j, i) are false,
+	// then the elements at index i and j are considered equal.
+	// Sort may place equal elements in any order in the final result,
+	// while Stable preserves the original input order of equal elements.
+	//
+	// Less must describe a transitive ordering:
+	//  - if both Less(i, j) and Less(j, k) are true, then Less(i, k) must be true as well.
+	//  - if both Less(i, j) and Less(j, k) are false, then Less(i, k) must be false as well.
+    Less(i, j int) bool
+
+    // Swap swaps the elements with indexes i and j.
+	Swap(i, j int)
 }
 
 // Singly linked list: a type of linked list in which each node has only one
@@ -80,7 +96,7 @@ func (list *singleLinkedList) Tail() *Node {
     return nodeAtTail
 }
 
-func (list *singleLinkedList) Count() int {
+func (list *singleLinkedList) Len() int {
     return list.nodeCount
 }
 
@@ -165,6 +181,32 @@ func (list *singleLinkedList) Unique() {
             nodeBefore = currentNode
         }
     }
+}
+
+func (list *singleLinkedList) Less(i, j int) bool {
+    nodeI, err := list.fetchNode(i)
+    if err != nil {
+        return false
+    }
+    nodeJ, err := list.fetchNode(j)
+    if err != nil {
+        return false
+    }
+    return nodeI.Value < nodeJ.Value
+}
+
+func (list *singleLinkedList) Swap(i, j int) {
+    nodeI, err := list.fetchNode(i)
+    if err != nil {
+        return
+    }
+    nodeJ, err := list.fetchNode(j)
+    if err != nil {
+        return
+    }
+    temp := nodeJ.Value
+    nodeJ.Value = nodeI.Value
+    nodeI.Value = temp
 }
 
 func (list *singleLinkedList) bindNewNode(nodeBefore *Node, newNode *Node, nodeAfter *Node) {

@@ -38,8 +38,8 @@ func TestSinglyLinkedList_Tail_TwoItemsList_ReturnLastNode(t *testing.T) {
     assert.Equal(t, list.Head().Next, tail)
 }
 
-func TestSinglyLinkedList_Count_With2TwoElementsList_Return2(t *testing.T) {
-    assert.Equal(t, 2, getListOfElements(2).Count())
+func TestSinglyLinkedList_Len_With2TwoElementsList_Return2(t *testing.T) {
+    assert.Equal(t, 2, getListOfElements(2).Len())
 }
 
 func TestSinglyLinkedList_GetNode_WithIndexMinus1EmptyList_ReturnError(t *testing.T) {
@@ -92,7 +92,7 @@ func TestSinglyLinkedList_Empty_WithTwoItemList_ReturnTrue(t *testing.T) {
 func TestSinglyLinkedList_AddNode_ReturnNonNilHeadAndOneNode(t *testing.T) {
     actual := MakeSingleLinkedList()
     actual.AddNode("Test")
-    assert.Equal(t, 1, actual.Count())
+    assert.Equal(t, 1, actual.Len())
     assert.NotNil(t, actual.Head())
     assert.Equal(t, "Test", actual.Head().Value)
     assert.Nil(t, actual.Head().Next)
@@ -102,7 +102,7 @@ func TestSinglyLinkedList_AddNode_WithTwoReturnSuccess(t *testing.T) {
     actual := MakeSingleLinkedList()
     actual.AddNode("Test")
     actual.AddNode("Test2")
-    assert.Equal(t, 2, actual.Count())
+    assert.Equal(t, 2, actual.Len())
     assert.NotNil(t, actual.Head())
     assert.NotNil(t, actual.Head().Next)
     assert.Equal(t, "Test", actual.Head().Value)
@@ -115,7 +115,7 @@ func TestSinglyLinkedList_AddNode_WithThreeReturnSuccess(t *testing.T) {
     actual.AddNode("Test")
     actual.AddNode("Test2")
     actual.AddNode("Test3")
-    assert.Equal(t, 3, actual.Count())
+    assert.Equal(t, 3, actual.Len())
     assert.NotNil(t, actual.Head())
     assert.NotNil(t, actual.Head().Next)
     assert.NotNil(t, actual.Head().Next.Next)
@@ -131,7 +131,6 @@ func TestSinglyLinkedList_InsertNodeBeforeAtIndexZeroEmptyList_ReturnSuccess(t *
     assert.Nil(t, err)
 }
 
-
 func TestSinglyLinkedList_InsertNodeBeforeAtIndexOneEmptyList_ReturnError(t *testing.T) {
     actual := MakeSingleLinkedList()
     err := actual.InsertNodeBefore(1, "Test")
@@ -143,7 +142,7 @@ func TestSinglyLinkedList_InsertNodeBeforeAtIndexZeroOneItemList_ReturnSuccess(t
     actual := getListOfElements(1)
     err := actual.InsertNodeBefore(0, "Another")
     assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Count())
+    assert.Equal(t, 2, actual.Len())
     assert.Equal(t, "Another", actual.Head().Value)
     assert.Equal(t, "Test1", actual.Head().Next.Value)
 }
@@ -152,7 +151,7 @@ func TestSinglyLinkedList_InsertNodeBeforeAtIndexOneOneItemList_ReturnSuccess(t 
     actual := getListOfElements(1)
     err := actual.InsertNodeBefore(1, "Another")
     assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Count())
+    assert.Equal(t, 2, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
     assert.Equal(t, "Another", actual.Head().Next.Value)
 }
@@ -168,7 +167,7 @@ func TestSinglyLinkedList_InsertNodeBeforeAtIndexOneTwoItemsList_ReturnSuccess(t
     actual := getListOfElements(2)
     err := actual.InsertNodeBefore(1, "Another")
     assert.Nil(t, err)
-    assert.Equal(t, 3, actual.Count())
+    assert.Equal(t, 3, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
     assert.Equal(t, "Another", actual.Head().Next.Value)
     assert.Equal(t, "Test2", actual.Head().Next.Next.Value)
@@ -192,7 +191,7 @@ func TestSinglyLinkedList_InsertNodeAfterAtIndexZeroOneItemList_ReturnSuccess(t 
     actual := getListOfElements(1)
     err := actual.InsertNodeAfter(0, "Another")
     assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Count())
+    assert.Equal(t, 2, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
     assert.Equal(t, "Another", actual.Head().Next.Value)
 }
@@ -215,7 +214,7 @@ func TestSinglyLinkedList_InsertNodeAfterAtIndexZeroTwoItemsList_ReturnSuccess(t
     actual := getListOfElements(2)
     err := actual.InsertNodeAfter(0, "Another")
     assert.Nil(t, err)
-    assert.Equal(t, 3, actual.Count())
+    assert.Equal(t, 3, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
     assert.Equal(t, "Another", actual.Head().Next.Value)
     assert.Equal(t, "Test2", actual.Head().Next.Next.Value)
@@ -225,7 +224,7 @@ func TestSinglyLinkedList_InsertNodeAfterAtIndexOneTwoItemsList_ReturnSuccess(t 
     actual := getListOfElements(2)
     err := actual.InsertNodeAfter(1, "Another")
     assert.Nil(t, err)
-    assert.Equal(t, 3, actual.Count())
+    assert.Equal(t, 3, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
     assert.Equal(t, "Test2", actual.Head().Next.Value)
     assert.Equal(t, "Another", actual.Head().Next.Next.Value)
@@ -249,7 +248,7 @@ func TestSinglyLinkedList_RemoveNode_AtIndexZeroWithTwoItemsList_ReturnSuccess(t
     actual := getListOfElements(2)
     err := actual.RemoveNode(0)
     assert.Nil(t, err)
-    assert.Equal(t, 1, actual.Count())
+    assert.Equal(t, 1, actual.Len())
     assert.Equal(t, "Test2", actual.Head().Value)
 }
 
@@ -257,7 +256,7 @@ func TestSinglyLinkedList_RemoveNode_AtIndexOneWithTwoItemsList_ReturnSuccess(t 
     actual := getListOfElements(2)
     err := actual.RemoveNode(1)
     assert.Nil(t, err)
-    assert.Equal(t, 1, actual.Count())
+    assert.Equal(t, 1, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
 }
 
@@ -265,7 +264,7 @@ func TestSinglyLinkedList_RemoveNode_AtIndexOneWithThreeItemsList_ReturnSuccess(
     actual := getListOfElements(3)
     err := actual.RemoveNode(1)
     assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Count())
+    assert.Equal(t, 2, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
     assert.Equal(t, "Test3", actual.Head().Next.Value)
 }
@@ -275,7 +274,7 @@ func TestSinglyLinkedList_RemoveNode_AtIndextTwoWithThreeItemsList_ReturnSuccess
     actual := getListOfElements(3)
     err := actual.RemoveNode(2)
     assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Count())
+    assert.Equal(t, 2, actual.Len())
     assert.Equal(t, "Test1", actual.Head().Value)
     assert.Equal(t, "Test2", actual.Head().Next.Value)
 }
@@ -290,21 +289,21 @@ func TestSinglyLinkedList_RemoveNode_AtIndexOneWithOneItemList_ReturnError(t *te
 func TestSinglyLinkedList_Clear_EmptyList_ReturnSuccess(t *testing.T) {
     actual := MakeSingleLinkedList()
     actual.Clear()
-    assert.Equal(t, 0, actual.Count())
+    assert.Equal(t, 0, actual.Len())
     assert.Nil(t, actual.Head())
 }
 
 func TestSinglyLinkedList_Clear_TwoItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
     actual.Clear()
-    assert.Equal(t, 0, actual.Count())
+    assert.Equal(t, 0, actual.Len())
     assert.Nil(t, actual.Head())
 }
 
 func TestSinglyLinkedList_Clear_ThreeItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(0)
     actual.Clear()
-    assert.Equal(t, 0, actual.Count())
+    assert.Equal(t, 0, actual.Len())
     assert.Nil(t, actual.Head())
 }
 
@@ -339,13 +338,13 @@ func TestSinglyLinkedList_Unique_WithEmptyList_ReturnSuccess(t *testing.T) {
 func TestSinglyLinkedList_Unique_WithOneItemList_ReturnSuccess(t *testing.T) {
     list := getListOfElements(1)
     list.Unique()
-    assert.Equal(t, 1, list.Count())
+    assert.Equal(t, 1, list.Len())
 }
 
 func TestSinglyLinkedList_Unique_WithTwoDifferentItemsList_ReturnSuccess(t *testing.T) {
     list := getListOfElements(2)
     list.Unique()
-    assert.Equal(t, 2, list.Count())
+    assert.Equal(t, 2, list.Len())
 }
 
 func TestSinglyLinkedList_Unique_WithTwoSameItemList_ReturnSuccess(t *testing.T) {
@@ -353,7 +352,7 @@ func TestSinglyLinkedList_Unique_WithTwoSameItemList_ReturnSuccess(t *testing.T)
     list.AddNode("Test")
     list.AddNode("Test")
     list.Unique()
-    assert.Equal(t, 1, list.Count())
+    assert.Equal(t, 1, list.Len())
     assert.Equal(t, "Test", list.Head().Value)
 }
 
@@ -364,9 +363,19 @@ func TestSinglyLinkedList_Unique_WithTwoSameItemTwoTimesList_ReturnSuccess(t *te
     list.AddNode("Hello")
     list.AddNode("Hello")
     list.Unique()
-    assert.Equal(t, 2, list.Count())
+    assert.Equal(t, 2, list.Len())
     assert.Equal(t, "Test", list.Head().Value)
     assert.Equal(t, "Hello", list.Head().Next.Value)
+}
+
+func TestSinglyLinkedList_Unique_WithTwoDiffItemsList_ReturnSuccess(t *testing.T) {
+    list := MakeSingleLinkedList()
+    list.AddNode("Test")
+    list.AddNode("Test2")
+    list.Unique()
+    assert.Equal(t, 2, list.Len())
+    assert.Equal(t, "Test", list.Head().Value)
+    assert.Equal(t, "Test2", list.Head().Next.Value)
 }
 
 func TestSinglyLinkedList_Unique_WithTwoSameItemOneDiffAndThreeTimesList_ReturnSuccess(t *testing.T) {
@@ -378,9 +387,93 @@ func TestSinglyLinkedList_Unique_WithTwoSameItemOneDiffAndThreeTimesList_ReturnS
     list.AddNode("Hello")
     list.AddNode("Hello")
     list.Unique()
-    assert.Equal(t, 3, list.Count())
+    assert.Equal(t, 3, list.Len())
     assert.Equal(t, "Test", list.Head().Value)
     assert.Equal(t, "Hi", list.Head().Next.Value)
     assert.Equal(t, "Hello", list.Head().Next.Next.Value)
+}
+
+func TestSinglyLinkedList_Less_WithZeroAndOneEmptyList_ReturnFalse(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    assert.False(t, actual.Less(0, 1))
+}
+
+func TestSinglyLinkedList_Less_WithZeroAndOneOneItemList_ReturnFalse(t *testing.T) {
+    actual := getListOfElements(1)
+    assert.False(t, actual.Less(0, 1))
+}
+
+func TestSinglyLinkedList_Less_WithZeroAndOneTwoSameItemList_ReturnFalse(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test")
+    actual.AddNode("Test")
+    assert.False(t, actual.Less(0, 1))
+}
+
+func TestSinglyLinkedList_Less_WithZeroAndOneTwoDiffItemList_ReturnTrue(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    actual.AddNode("Test1")
+    assert.True(t, actual.Less(0, 1))
+}
+
+func TestSinglyLinkedList_Less_WithZeroAndOneTwoDiffItemReverseList_ReturnFalse(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test1")
+    actual.AddNode("Test0")
+    assert.False(t, actual.Less(0, 1))
+}
+
+func TestSinglyLinkedList_Less_WithZeroAndOneTwoDiffItemReverseIndexList_ReturnFalse(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    actual.AddNode("Test1")
+    assert.False(t, actual.Less(1, 0))
+}
+
+func TestSinglyLinkedList_Less_WithIOutOfRange_ReturnFalse(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    assert.False(t, actual.Less(1, 0))
+}
+
+func TestSinglyLinkedList_Less_WithJOutOfRange_ReturnFalse(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    assert.False(t, actual.Less(0, 1))
+}
+
+func TestSinglyLinkedList_Swap_WithZeroAndOneIndex_ReturnSuccess(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    actual.AddNode("Test1")
+    actual.Swap(0, 1)
+    assert.Equal(t, "Test1", actual.Head().Value)
+    assert.Equal(t, "Test0", actual.Head().Next.Value)
+}
+
+func TestSinglyLinkedList_Swap_WithOneAndZeroIndex_ReturnSuccess(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    actual.AddNode("Test1")
+    actual.Swap(1, 0)
+    assert.Equal(t, "Test1", actual.Head().Value)
+    assert.Equal(t, "Test0", actual.Head().Next.Value)
+}
+
+func TestSinglyLinkedList_Swap_WithIOutOfRange_ReturnSuccess(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    actual.Swap(1, 0)
+    assert.Equal(t, 1, actual.Len())
+    assert.Equal(t, "Test0", actual.Head().Value)
+}
+
+func TestSinglyLinkedList_Swap_WithJOutOfRange_ReturnSuccess(t *testing.T) {
+    actual := MakeSingleLinkedList()
+    actual.AddNode("Test0")
+    actual.Swap(0, 1)
+    assert.Equal(t, 1, actual.Len())
+    assert.Equal(t, "Test0", actual.Head().Value)
 }
 
