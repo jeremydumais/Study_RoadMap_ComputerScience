@@ -9,11 +9,11 @@ Learning Go Lang at the same time.
 
 ### Data Structures
 
-&#9745; Array
+&#9745; Array (Revision only)
 
 &#9744; Linked List
-- &#9745; Singly Linked List
-- &#9744; Doubly Linked List
+- &#9745; [Single Linked List](https://github.com/jeremydumais/Study_RoadMap_ComputerScience/tree/main/Linked%20List/README.md#single-linked-list) (Theory + Implementation)
+- &#9744; Double Linked List
 - &#9744; Circular Linked List
 - &#9744; Circular Doubly Linked List
 
