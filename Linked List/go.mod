@@ -1,4 +1,4 @@
-module study/linkedlist
+module study/linkedlistdemo
 
 go 1.18
 

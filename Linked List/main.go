@@ -4,12 +4,13 @@ package main
 import ( 
     "fmt"
     "os"
+    "study/linkedlistdemo/singlylinkedlist"
 )
 
 func main() {
-    var list = MakeSingleLinkedList();
+    var list = singlylinkedlist.MakeSingleLinkedList();
     if list.Head() == nil {
-        fmt.Printf("Erreur\n")
-        os.Exit(1)
+        fmt.Printf("The list is empty\n")
+        os.Exit(0)
     }
 }

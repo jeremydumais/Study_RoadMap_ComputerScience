@@ -1,12 +1,12 @@
-// A demo of multiple forms of linked list
-package main
+// Package singlylinkedlist contains all the objects of a singly linked list.
+package singlylinkedlist
 
 import "errors"
 
 // Node This represent a node item in the list.
 type Node struct {
-	next  *Node
-	value string
+	Next  *Node
+	Value string
 }
 
 // SingleLinkedList is the interface to the singly linked list structure. 
@@ -15,24 +15,39 @@ type Node struct {
 type SingleLinkedList interface {
     // Return the first node of the list. If the list is empty nil will be returned.
     Head() *Node
+
     // Return the last node of the list. If the list is empty nil will be returned.
     Tail() *Node
+
     // Return the number of nodes in the list.
     Count() int
+
     // Return a node at a specific index. The first element would be the index
     // zero.
     GetNode(index int) (*Node, error)
+
     // Return true if the list has no element and false if the list contains at
     // least one element.
     Empty() bool
+
     // Add a new node at the end of the list.
     AddNode(value string)
+
     // Insert a new node before the element at the specified index.
-    InsertNode(index int, value string) error
+    InsertNodeBefore(index int, value string) error
+
+    //TODO InsertNodeAfter(index int, value string) error
+
     // Remove the node the is located at the specified index.
     RemoveNode(index int) error
+
     // Remove all the elements of the list.
     Clear()
+
+    //TODO PopFront
+    //TODO Unique
+    //TODO Sort 
+    //TODO Reverse
 }
 
 // Singly linked list: a type of linked list in which each node has only one
@@ -79,15 +94,15 @@ func (list *singleLinkedList) AddNode(value string) {
     } else {
         // Go to last node
         lastNode := list.head
-        for (lastNode.next != nil) {
-            lastNode = lastNode.next
+        for (lastNode.Next != nil) {
+            lastNode = lastNode.Next
         }
-        lastNode.next = newNode
+        lastNode.Next = newNode
     }
     list.nodeCount++
 }
 
-func (list *singleLinkedList) InsertNode(index int, value string) error {
+func (list *singleLinkedList) InsertNodeBefore(index int, value string) error {
     if index < 0 || index > list.nodeCount {
         return errors.New("index out of range")
     }
@@ -117,23 +132,23 @@ func (list *singleLinkedList) Clear() {
 
 func (list *singleLinkedList) bindNewNode(nodeBefore *Node, newNode *Node, nodeAfter *Node) {
     if nodeBefore != nil {
-        nodeBefore.next = newNode
+        nodeBefore.Next = newNode
     } else {
         list.head = newNode
     }
     if (nodeAfter != nil) {
-        newNode.next = nodeAfter
+        newNode.Next = nodeAfter
     } else {
-        newNode.next = nil
+        newNode.Next = nil
     }
     list.nodeCount++
 }
 
 func (list *singleLinkedList) unbindNode(nodeBefore *Node, node *Node) {
     if nodeBefore == nil {
-        list.head = node.next
+        list.head = node.Next
     } else {
-        nodeBefore.next = node.next
+        nodeBefore.Next = node.Next
     }
     list.nodeCount--
 
@@ -145,7 +160,7 @@ func (list *singleLinkedList) fetchNode(index int) (*Node, error) {
     }
     currentNode := list.head
     for i := 0; i < index; i++ {
-        currentNode = currentNode.next
+        currentNode = currentNode.Next
     }
     return currentNode, nil
 }
