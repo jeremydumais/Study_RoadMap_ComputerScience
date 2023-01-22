@@ -3,7 +3,6 @@ package singlelinkedlist
 
 import (
     "errors"
-    //"sort"
 )
 
 // Node This represent a node item in the list.
@@ -230,7 +229,6 @@ func (list *singleLinkedList) unbindNode(nodeBefore *Node, node *Node) {
         nodeBefore.Next = node.Next
     }
     list.nodeCount--
-
 }
 
 func (list *singleLinkedList) fetchNode(index int) (*Node, error) {
