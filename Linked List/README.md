@@ -18,3 +18,23 @@ you have reach the last node.
 
 See the [SingleLinkedList README](https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked%20List/singlelinkedlist/README.md)
 for the demo implementation details.
+
+## Double Linked List
+
+The double linked list is composed of a head pointer to the first Node of the
+list and with a tail pointer to the last Node of the list.
+
+If the list is empty, the head and tail points to nil.
+
+A node is composed of a value (a string in our implementation), a next value
+which points to the next node and a prev value which points to the previous 
+node. You navigate in the list either by starting from the head to the last node
+through the next pointer or by starting from the tail to the first node through
+the prev pointer. When next equals nil it means that you have reach the last 
+node. The same way when prev equals nil it means that you have reach the first
+node.
+
+![DoubleLinkedList](https://raw.githubusercontent.com/jeremydumais/Study_RoadMap_ComputerScience/medias/Doubly-linked-list.png)
+
+See the [DoubleLinkedList README](https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked%20List/doublelinkedlist/README.md)
+for the demo implementation details.

@@ -13,7 +13,7 @@ Learning Go Lang at the same time.
 
 &#9744; Linked List
 - &#9745; [Single Linked List](https://github.com/jeremydumais/Study_RoadMap_ComputerScience/tree/main/Linked%20List/README.md#single-linked-list) (Theory + Implementation)
-- &#9744; Double Linked List
+- &#9745; [Double Linked List]
 - &#9744; Circular Linked List
 - &#9744; Circular Doubly Linked List
 
