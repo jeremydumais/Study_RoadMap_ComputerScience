@@ -1,24 +1,28 @@
 // Package doublelinkedlist contains all the objects of a doubly linked list.
 package doublelinkedlist
 
-import "errors"
+import (
+    "errors"
+	"study/linkedlistdemo/nodes"
+	"study/linkedlistdemo/helpers"
+)
 
 // DoubleLinkedList is the interface to the double linked list structure.
 // A double linked list is a type of linked list in which each node has a
 // previous and a next link to the corresponding node in the list.
 type DoubleLinkedList interface {
     // Return the first node of the list. If the list is empty nil will be returned.
-    Head() Node
+    Head() nodes.FullNode
 
     // Return the last node of the list. If the list is empty nil will be returned.
-    Tail() Node
+    Tail() nodes.FullNode
 
     // Return the number of nodes in the list.
     Len() int
 
     // Return a node at a specific index. The first element would be the index
     // zero.
-    GetNode(index int) (Node, error)
+    GetNode(index int) (nodes.FullNode, error)
 
     // Return true if the list has no element and false if the list contains at
     // least one element.
@@ -66,8 +70,8 @@ type DoubleLinkedList interface {
 }
 
 type doublelinkedlist struct {
-	head *node
-    tail *node
+	head nodes.FullNode
+    tail nodes.FullNode
     nodeCount int
 }
 
@@ -77,11 +81,11 @@ func MakeDoubleLinkedList() DoubleLinkedList {
     return retval 
 }
 
-func (list *doublelinkedlist) Head() Node {
+func (list *doublelinkedlist) Head() nodes.FullNode {
     return list.head
 }
 
-func (list *doublelinkedlist) Tail() Node {
+func (list *doublelinkedlist) Tail() nodes.FullNode {
     return list.tail
 }
 
@@ -89,25 +93,25 @@ func (list *doublelinkedlist) Len() int {
     return list.nodeCount
 }
     
-func (list *doublelinkedlist) GetNode(index int) (Node, error) {
+func (list *doublelinkedlist) GetNode(index int) (nodes.FullNode, error) {
     return list.fetchNode(index);
 }
 
 func (list *doublelinkedlist) Empty() bool {
     return list.nodeCount == 0 && 
-           list.head == nil &&
-           list.tail == nil
+           helpers.IsNil(list.head) &&
+           helpers.IsNil(list.tail)
 }
 
 func (list *doublelinkedlist) AddNode(value string) {
-    newNode := &node{nil, nil, value}
-    if list.head == nil {
+    newNode := nodes.MakeFullNode(nil, nil, value)
+    if helpers.IsNil(list.head) {
         list.head = newNode
         list.tail = list.head
     } else {
         lastNode := list.tail
-        lastNode.next = newNode
-        newNode.prev = lastNode
+        lastNode.SetNext(newNode)
+        newNode.SetPrev(lastNode)
         list.tail = newNode
     }
     list.nodeCount++
@@ -117,12 +121,14 @@ func (list *doublelinkedlist) InsertNodeBefore(index int, value string) error {
     if index < 0 || index > list.nodeCount {
         return errors.New("index out of range")
     }
-    var nodeAtInsertPosition *node
+    var nodeAtInsertPosition nodes.FullNode
     if index < list.nodeCount {
         nodeAtInsertPosition, _ = list.fetchNode(index)
     }
     nodeBeforeInsertPosition, _ := list.fetchNode(index - 1)
-    newNode := &node{nodeBeforeInsertPosition, nodeAtInsertPosition, value}
+    newNode := nodes.MakeFullNode(nodeBeforeInsertPosition, 
+                                  nodeAtInsertPosition, 
+                                  value)
     list.bindNewNode(nodeBeforeInsertPosition, newNode, nodeAtInsertPosition)
     return nil
 }
@@ -132,8 +138,8 @@ func (list *doublelinkedlist) InsertNodeAfter(index int, value string) error {
     if err != nil {
         return err
     }
-    newNode := &node{nil, nil, value}
-    list.bindNewNode(nodeAtInsertPosition, newNode, nodeAtInsertPosition.next)
+    newNode := nodes.MakeFullNode(nil, nil, value)
+    list.bindNewNode(nodeAtInsertPosition, newNode, nodeAtInsertPosition.Next())
     return nil 
 
 }
@@ -178,7 +184,7 @@ func (list *doublelinkedlist) Unique() {
     for i := 1; i < list.nodeCount; i++ {
         currentNode, _ := list.fetchNode(i)
         nodeAfter, _ := list.fetchNode(i + 1)
-        if currentNode.value == nodeBefore.value {
+        if currentNode.Value() == nodeBefore.Value() {
             list.unbindNode(nodeBefore, currentNode, nodeAfter)
             i--
         } else {
@@ -196,7 +202,7 @@ func (list *doublelinkedlist) Less(i, j int) bool {
     if err != nil {
         return false
     }
-    return nodeI.value < nodeJ.value
+    return nodeI.Value() < nodeJ.Value()
 }
 
 func (list *doublelinkedlist) Swap(i, j int) {
@@ -208,50 +214,52 @@ func (list *doublelinkedlist) Swap(i, j int) {
     if err != nil {
         return
     }
-    temp := nodeJ.value
-    nodeJ.value = nodeI.value
-    nodeI.value = temp
+    temp := nodeJ.Value()
+    nodeJ.SetValue(nodeI.Value())
+    nodeI.SetValue(temp)
 }
 
-func (list *doublelinkedlist) bindNewNode(nodeBefore *node, newNode *node, nodeAfter *node) {
-    if nodeBefore != nil {
-        nodeBefore.next = newNode
-        newNode.prev = nodeBefore
+func (list *doublelinkedlist) bindNewNode(nodeBefore nodes.FullNode, 
+                                          newNode nodes.FullNode, 
+                                          nodeAfter nodes.FullNode) {
+    if !helpers.IsNil(nodeBefore) {
+        nodeBefore.SetNext(newNode)
+        newNode.SetPrev(nodeBefore)
     } else {
         list.head = newNode
     }
-    if (nodeAfter != nil) {
-        newNode.next = nodeAfter
-        nodeAfter.prev = newNode
+    if !helpers.IsNil(nodeAfter) {
+        newNode.SetNext(nodeAfter)
+        nodeAfter.SetPrev(newNode)
     } else {
         list.tail = newNode
     }
     list.nodeCount++
 }
 
-func (list *doublelinkedlist) unbindNode(nodeBefore *node, 
-                                         node *node, 
-                                         nodeAfter *node) {
-    if nodeBefore == nil {
-        list.head = node.next
+func (list *doublelinkedlist) unbindNode(nodeBefore nodes.FullNode, 
+                                         node nodes.FullNode, 
+                                         nodeAfter nodes.FullNode) {
+    if helpers.IsNil(nodeBefore) {
+        list.head = node.Next()
     } else {
-        nodeBefore.next = node.next
+        nodeBefore.SetNext(node.Next())
     }
-    if nodeAfter == nil {
-        list.tail = node.prev
+    if helpers.IsNil(nodeAfter) {
+        list.tail = node.Prev()
     } else {
-        nodeAfter.prev = node.prev
+        nodeAfter.SetPrev(node.Prev())
     }
     list.nodeCount--
 }
 
-func (list *doublelinkedlist) fetchNode(index int) (*node, error) {
+func (list *doublelinkedlist) fetchNode(index int) (nodes.FullNode, error) {
     if index < 0 || index > list.nodeCount - 1 {
         return nil, errors.New("index out of range") 
     }
     currentNode := list.head
     for i := 0; i < index; i++ {
-        currentNode = currentNode.next
+        currentNode = currentNode.Next()
     }
     return currentNode, nil
 }
