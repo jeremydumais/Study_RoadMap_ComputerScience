@@ -1,8 +1,9 @@
 // Package nodes contains all the objects for the different node types.
 package nodes
 
-// FullNode is the interface of the node structure. This represent a node item in
-// the list.
+// FullNode is the interface for the node structure of a double linked list
+// or a circular double linked list. This represent a node item in the list and 
+// has a next and a previous method for navigate.
 type FullNode interface {
     // Return the previous node. If there is no previous node the value returned
     // is nil.
@@ -66,10 +67,18 @@ func (nodeitem *fullNode) SetValue(value string) {
 }
     
 func (nodeitem *fullNode) SetPrev(node FullNode) {
-    nodeitem.prev = node.(*fullNode)
+    if node != nil {
+        nodeitem.prev = node.(*fullNode)
+    } else {
+        nodeitem.prev = nil
+    }
 }
 
 func (nodeitem *fullNode) SetNext(node FullNode) {
-    nodeitem.next = node.(*fullNode)
+    if node != nil {
+        nodeitem.next = node.(*fullNode)
+    } else {
+        nodeitem.next = nil
+    }
 }
 

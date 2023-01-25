@@ -99,13 +99,13 @@ func (list *doublelinkedlist) GetNode(index int) (nodes.FullNode, error) {
 
 func (list *doublelinkedlist) Empty() bool {
     return list.nodeCount == 0 && 
-           helpers.IsNil(list.head) &&
-           helpers.IsNil(list.tail)
+           helpers.IsInterfaceNil(list.head) &&
+           helpers.IsInterfaceNil(list.tail)
 }
 
 func (list *doublelinkedlist) AddNode(value string) {
     newNode := nodes.MakeFullNode(nil, nil, value)
-    if helpers.IsNil(list.head) {
+    if helpers.IsInterfaceNil(list.head) {
         list.head = newNode
         list.tail = list.head
     } else {
@@ -222,13 +222,13 @@ func (list *doublelinkedlist) Swap(i, j int) {
 func (list *doublelinkedlist) bindNewNode(nodeBefore nodes.FullNode, 
                                           newNode nodes.FullNode, 
                                           nodeAfter nodes.FullNode) {
-    if !helpers.IsNil(nodeBefore) {
+    if !helpers.IsInterfaceNil(nodeBefore) {
         nodeBefore.SetNext(newNode)
         newNode.SetPrev(nodeBefore)
     } else {
         list.head = newNode
     }
-    if !helpers.IsNil(nodeAfter) {
+    if !helpers.IsInterfaceNil(nodeAfter) {
         newNode.SetNext(nodeAfter)
         nodeAfter.SetPrev(newNode)
     } else {
@@ -240,12 +240,12 @@ func (list *doublelinkedlist) bindNewNode(nodeBefore nodes.FullNode,
 func (list *doublelinkedlist) unbindNode(nodeBefore nodes.FullNode, 
                                          node nodes.FullNode, 
                                          nodeAfter nodes.FullNode) {
-    if helpers.IsNil(nodeBefore) {
+    if helpers.IsInterfaceNil(nodeBefore) {
         list.head = node.Next()
     } else {
         nodeBefore.SetNext(node.Next())
     }
-    if helpers.IsNil(nodeAfter) {
+    if helpers.IsInterfaceNil(nodeAfter) {
         list.tail = node.Prev()
     } else {
         nodeAfter.SetPrev(node.Prev())

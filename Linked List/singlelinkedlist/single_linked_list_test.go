@@ -15,6 +15,28 @@ func getListOfElements(numberOfNodes int) SingleLinkedList {
     return list
 }
 
+func checkElementsLinkage(t *testing.T, expectedElement []string, list SingleLinkedList) { 
+    assert.Equal(t, len(expectedElement), list.Len())
+    currentNode := list.Head();
+    for i, elem := range expectedElement {
+        assert.NotNil(t, elem)
+        assert.Equal(t, elem, currentNode.Value())
+        // If it's the first element
+        if i == 0 {
+            assert.Same(t, list.Head(), currentNode)
+        }
+        // If it's the last element
+        if i == len(expectedElement) - 1 {
+            assert.Nil(t, currentNode.Next())
+            assert.Same(t, list.Tail(), currentNode)
+        } else {
+            assert.NotNil(t, currentNode.Next())
+        }
+        currentNode = currentNode.Next()
+    }
+}
+
+
 func TestSingleLinkedList_Make_ReturnNilHead(t *testing.T) {
     actual := MakeSingleLinkedList()
     assert.Nil(t, actual.Head())
@@ -35,7 +57,7 @@ func TestSingleLinkedList_Tail_TwoItemsList_ReturnLastNode(t *testing.T) {
     list := getListOfElements(2)
     tail := list.Tail()
     assert.NotNil(t, tail)
-    assert.Equal(t, list.Head().Next, tail)
+    assert.Equal(t, list.Head().Next(), tail)
 }
 
 func TestSingleLinkedList_Len_With2TwoElementsList_Return2(t *testing.T) {
@@ -60,14 +82,14 @@ func TestSingleLinkedList_GetNode_WithIndex0OneElementList_ReturnNode(t *testing
     actual := getListOfElements(1) 
     res, _ := actual.GetNode(0)
     assert.NotNil(t, res)
-    assert.Equal(t, "Test1", res.Value)
+    assert.Equal(t, "Test1", res.Value())
 }
 
 func TestSingleLinkedList_GetNode_WithIndex1TwoElementsList_ReturnNode(t *testing.T) {
     actual := getListOfElements(2)
     res, _ := actual.GetNode(1)
     assert.NotNil(t, res)
-    assert.Equal(t, "Test2", res.Value)
+    assert.Equal(t, "Test2", res.Value())
 }
 
 func TestSingleLinkedList_GetNode_WithIndex2TwoElementsList_ReturnError(t *testing.T) {
@@ -92,22 +114,7 @@ func TestSingleLinkedList_Empty_WithTwoItemList_ReturnTrue(t *testing.T) {
 func TestSingleLinkedList_AddNode_ReturnNonNilHeadAndOneNode(t *testing.T) {
     actual := MakeSingleLinkedList()
     actual.AddNode("Test")
-    assert.Equal(t, 1, actual.Len())
-    assert.NotNil(t, actual.Head())
-    assert.Equal(t, "Test", actual.Head().Value)
-    assert.Nil(t, actual.Head().Next)
-}
-
-func TestSingleLinkedList_AddNode_WithTwoReturnSuccess(t *testing.T) {
-    actual := MakeSingleLinkedList()
-    actual.AddNode("Test")
-    actual.AddNode("Test2")
-    assert.Equal(t, 2, actual.Len())
-    assert.NotNil(t, actual.Head())
-    assert.NotNil(t, actual.Head().Next)
-    assert.Equal(t, "Test", actual.Head().Value)
-    assert.Equal(t, "Test2", actual.Head().Next.Value)
-    assert.Nil(t, actual.Head().Next.Next)
+    checkElementsLinkage(t, []string {"Test"}, actual)
 }
 
 func TestSingleLinkedList_AddNode_WithThreeReturnSuccess(t *testing.T) {
@@ -115,20 +122,13 @@ func TestSingleLinkedList_AddNode_WithThreeReturnSuccess(t *testing.T) {
     actual.AddNode("Test")
     actual.AddNode("Test2")
     actual.AddNode("Test3")
-    assert.Equal(t, 3, actual.Len())
-    assert.NotNil(t, actual.Head())
-    assert.NotNil(t, actual.Head().Next)
-    assert.NotNil(t, actual.Head().Next.Next)
-    assert.Equal(t, "Test", actual.Head().Value)
-    assert.Equal(t, "Test2", actual.Head().Next.Value)
-    assert.Equal(t, "Test3", actual.Head().Next.Next.Value)
-    assert.Nil(t, actual.Head().Next.Next.Next)
+    checkElementsLinkage(t, []string {"Test", "Test2", "Test3"}, actual)
 }
 
 func TestSingleLinkedList_InsertNodeBeforeAtIndexZeroEmptyList_ReturnSuccess(t *testing.T) {
     actual := MakeSingleLinkedList()
-    err := actual.InsertNodeBefore(0, "Test")
-    assert.Nil(t, err)
+    assert.Nil(t, actual.InsertNodeBefore(0, "Test"))
+    checkElementsLinkage(t, []string {"Test"}, actual)
 }
 
 func TestSingleLinkedList_InsertNodeBeforeAtIndexOneEmptyList_ReturnError(t *testing.T) {
@@ -140,20 +140,14 @@ func TestSingleLinkedList_InsertNodeBeforeAtIndexOneEmptyList_ReturnError(t *tes
 
 func TestSingleLinkedList_InsertNodeBeforeAtIndexZeroOneItemList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(1)
-    err := actual.InsertNodeBefore(0, "Another")
-    assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Len())
-    assert.Equal(t, "Another", actual.Head().Value)
-    assert.Equal(t, "Test1", actual.Head().Next.Value)
+    assert.Nil(t, actual.InsertNodeBefore(0, "Another"))
+    checkElementsLinkage(t, []string {"Another", "Test1"}, actual)
 }
 
 func TestSingleLinkedList_InsertNodeBeforeAtIndexOneOneItemList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(1)
-    err := actual.InsertNodeBefore(1, "Another")
-    assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Another", actual.Head().Next.Value)
+    assert.Nil(t, actual.InsertNodeBefore(1, "Another"))
+    checkElementsLinkage(t, []string {"Test1", "Another"}, actual)
 }
 
 func TestSingleLinkedList_InsertNodeBeforeAtIndexTwoOneList_ReturnError(t *testing.T) {
@@ -165,12 +159,8 @@ func TestSingleLinkedList_InsertNodeBeforeAtIndexTwoOneList_ReturnError(t *testi
 
 func TestSingleLinkedList_InsertNodeBeforeAtIndexOneTwoItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
-    err := actual.InsertNodeBefore(1, "Another")
-    assert.Nil(t, err)
-    assert.Equal(t, 3, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Another", actual.Head().Next.Value)
-    assert.Equal(t, "Test2", actual.Head().Next.Next.Value)
+    assert.Nil(t, actual.InsertNodeBefore(1, "Another"))
+    checkElementsLinkage(t, []string {"Test1", "Another", "Test2"}, actual)
 }
 
 func TestSingleLinkedList_InsertNodeAfterAtIndexZeroEmptyList_ReturnError(t *testing.T) {
@@ -189,11 +179,8 @@ func TestSingleLinkedList_InsertNodeAfterAtIndexOneEmptyList_ReturnError(t *test
 
 func TestSingleLinkedList_InsertNodeAfterAtIndexZeroOneItemList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(1)
-    err := actual.InsertNodeAfter(0, "Another")
-    assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Another", actual.Head().Next.Value)
+    assert.Nil(t, actual.InsertNodeAfter(0, "Another"))
+    checkElementsLinkage(t, []string {"Test1", "Another"}, actual)
 }
 
 func TestSingleLinkedList_InsertNodeAfterAtIndexOneOneItemList_ReturnError(t *testing.T) {
@@ -212,22 +199,14 @@ func TestSingleLinkedList_InsertNodeAfterAtIndexTwoOneList_ReturnError(t *testin
 
 func TestSingleLinkedList_InsertNodeAfterAtIndexZeroTwoItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
-    err := actual.InsertNodeAfter(0, "Another")
-    assert.Nil(t, err)
-    assert.Equal(t, 3, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Another", actual.Head().Next.Value)
-    assert.Equal(t, "Test2", actual.Head().Next.Next.Value)
+    assert.Nil(t, actual.InsertNodeAfter(0, "Another"))
+    checkElementsLinkage(t, []string {"Test1", "Another", "Test2"}, actual)
 }
 
 func TestSingleLinkedList_InsertNodeAfterAtIndexOneTwoItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
-    err := actual.InsertNodeAfter(1, "Another")
-    assert.Nil(t, err)
-    assert.Equal(t, 3, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Test2", actual.Head().Next.Value)
-    assert.Equal(t, "Another", actual.Head().Next.Next.Value)
+    assert.Nil(t, actual.InsertNodeAfter(1, "Another"))
+    checkElementsLinkage(t, []string {"Test1", "Test2", "Another"}, actual)
 }
 
 func TestSingleLinkedList_RemoveNode_AtIndexZeroWithEmptyList_ReturnError(t *testing.T) {
@@ -239,44 +218,32 @@ func TestSingleLinkedList_RemoveNode_AtIndexZeroWithEmptyList_ReturnError(t *tes
 
 func TestSingleLinkedList_RemoveNode_AtIndexZeroWithOneItemList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(1)
-    err := actual.RemoveNode(0)
-    assert.Nil(t, err)
+    assert.Nil(t, actual.RemoveNode(0))
     assert.True(t, actual.Empty())
 }
 
 func TestSingleLinkedList_RemoveNode_AtIndexZeroWithTwoItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
-    err := actual.RemoveNode(0)
-    assert.Nil(t, err)
-    assert.Equal(t, 1, actual.Len())
-    assert.Equal(t, "Test2", actual.Head().Value)
+    assert.Nil(t, actual.RemoveNode(0))
+    checkElementsLinkage(t, []string {"Test2"}, actual)
 }
 
 func TestSingleLinkedList_RemoveNode_AtIndexOneWithTwoItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
-    err := actual.RemoveNode(1)
-    assert.Nil(t, err)
-    assert.Equal(t, 1, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
+    assert.Nil(t, actual.RemoveNode(1))
+    checkElementsLinkage(t, []string {"Test1"}, actual)
 }
 
 func TestSingleLinkedList_RemoveNode_AtIndexOneWithThreeItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(3)
-    err := actual.RemoveNode(1)
-    assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Test3", actual.Head().Next.Value)
+    assert.Nil(t, actual.RemoveNode(1))
+    checkElementsLinkage(t, []string {"Test1", "Test3"}, actual)
 }
 
 func TestSingleLinkedList_RemoveNode_AtIndextTwoWithThreeItemsList_ReturnSuccess(t *testing.T) {
-
     actual := getListOfElements(3)
-    err := actual.RemoveNode(2)
-    assert.Nil(t, err)
-    assert.Equal(t, 2, actual.Len())
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Test2", actual.Head().Next.Value)
+    assert.Nil(t, actual.RemoveNode(2))
+    checkElementsLinkage(t, []string {"Test1", "Test2"}, actual)
 }
 
 func TestSingleLinkedList_RemoveNode_AtIndexOneWithOneItemList_ReturnError(t *testing.T) {
@@ -289,22 +256,19 @@ func TestSingleLinkedList_RemoveNode_AtIndexOneWithOneItemList_ReturnError(t *te
 func TestSingleLinkedList_Clear_EmptyList_ReturnSuccess(t *testing.T) {
     actual := MakeSingleLinkedList()
     actual.Clear()
-    assert.Equal(t, 0, actual.Len())
-    assert.Nil(t, actual.Head())
+    assert.True(t, actual.Empty())
 }
 
 func TestSingleLinkedList_Clear_TwoItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
     actual.Clear()
-    assert.Equal(t, 0, actual.Len())
-    assert.Nil(t, actual.Head())
+    assert.True(t, actual.Empty())
 }
 
 func TestSingleLinkedList_Clear_ThreeItemsList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(0)
     actual.Clear()
-    assert.Equal(t, 0, actual.Len())
-    assert.Nil(t, actual.Head())
+    assert.True(t, actual.Empty())
 }
 
 func TestSingleLinkedList_PopFront_EmptyList_ReturnError(t *testing.T) {
@@ -316,17 +280,14 @@ func TestSingleLinkedList_PopFront_EmptyList_ReturnError(t *testing.T) {
 
 func TestSingleLinkedList_PopFront_OneItemList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(1)
-    err := actual.PopFront()
-    assert.Nil(t, err)
+    assert.Nil(t, actual.PopFront())
     assert.True(t, actual.Empty())
 }
 
 func TestSingleLinkedList_PopFront_TwoItemList_ReturnSuccess(t *testing.T) {
     actual := getListOfElements(2)
-    err := actual.PopFront()
-    assert.Nil(t, err)
-    assert.False(t, actual.Empty())
-    assert.Equal(t, "Test2", actual.Head().Value)
+    assert.Nil(t, actual.PopFront())
+    checkElementsLinkage(t, []string {"Test2"}, actual)
 }
 
 func TestSingleLinkedList_Unique_WithEmptyList_ReturnSuccess(t *testing.T) {
@@ -352,8 +313,7 @@ func TestSingleLinkedList_Unique_WithTwoSameItemList_ReturnSuccess(t *testing.T)
     list.AddNode("Test")
     list.AddNode("Test")
     list.Unique()
-    assert.Equal(t, 1, list.Len())
-    assert.Equal(t, "Test", list.Head().Value)
+    checkElementsLinkage(t, []string {"Test"}, list)
 }
 
 func TestSingleLinkedList_Unique_WithTwoSameItemTwoTimesList_ReturnSuccess(t *testing.T) {
@@ -363,9 +323,7 @@ func TestSingleLinkedList_Unique_WithTwoSameItemTwoTimesList_ReturnSuccess(t *te
     list.AddNode("Hello")
     list.AddNode("Hello")
     list.Unique()
-    assert.Equal(t, 2, list.Len())
-    assert.Equal(t, "Test", list.Head().Value)
-    assert.Equal(t, "Hello", list.Head().Next.Value)
+    checkElementsLinkage(t, []string {"Test", "Hello"}, list)
 }
 
 func TestSingleLinkedList_Unique_WithTwoDiffItemsList_ReturnSuccess(t *testing.T) {
@@ -373,9 +331,7 @@ func TestSingleLinkedList_Unique_WithTwoDiffItemsList_ReturnSuccess(t *testing.T
     list.AddNode("Test")
     list.AddNode("Test2")
     list.Unique()
-    assert.Equal(t, 2, list.Len())
-    assert.Equal(t, "Test", list.Head().Value)
-    assert.Equal(t, "Test2", list.Head().Next.Value)
+    checkElementsLinkage(t, []string {"Test", "Test2"}, list)
 }
 
 func TestSingleLinkedList_Unique_WithTwoSameItemOneDiffAndThreeTimesList_ReturnSuccess(t *testing.T) {
@@ -387,10 +343,7 @@ func TestSingleLinkedList_Unique_WithTwoSameItemOneDiffAndThreeTimesList_ReturnS
     list.AddNode("Hello")
     list.AddNode("Hello")
     list.Unique()
-    assert.Equal(t, 3, list.Len())
-    assert.Equal(t, "Test", list.Head().Value)
-    assert.Equal(t, "Hi", list.Head().Next.Value)
-    assert.Equal(t, "Hello", list.Head().Next.Next.Value)
+    checkElementsLinkage(t, []string {"Test", "Hi", "Hello"}, list)
 }
 
 func TestSingleLinkedList_Less_WithZeroAndOneEmptyList_ReturnFalse(t *testing.T) {
@@ -448,8 +401,7 @@ func TestSingleLinkedList_Swap_WithZeroAndOneIndex_ReturnSuccess(t *testing.T) {
     actual.AddNode("Test0")
     actual.AddNode("Test1")
     actual.Swap(0, 1)
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Test0", actual.Head().Next.Value)
+    checkElementsLinkage(t, []string {"Test1", "Test0"}, actual)
 }
 
 func TestSingleLinkedList_Swap_WithOneAndZeroIndex_ReturnSuccess(t *testing.T) {
@@ -457,23 +409,20 @@ func TestSingleLinkedList_Swap_WithOneAndZeroIndex_ReturnSuccess(t *testing.T) {
     actual.AddNode("Test0")
     actual.AddNode("Test1")
     actual.Swap(1, 0)
-    assert.Equal(t, "Test1", actual.Head().Value)
-    assert.Equal(t, "Test0", actual.Head().Next.Value)
+    checkElementsLinkage(t, []string {"Test1", "Test0"}, actual)
 }
 
 func TestSingleLinkedList_Swap_WithIOutOfRange_ReturnSuccess(t *testing.T) {
     actual := MakeSingleLinkedList()
     actual.AddNode("Test0")
     actual.Swap(1, 0)
-    assert.Equal(t, 1, actual.Len())
-    assert.Equal(t, "Test0", actual.Head().Value)
+    checkElementsLinkage(t, []string {"Test0"}, actual)
 }
 
 func TestSingleLinkedList_Swap_WithJOutOfRange_ReturnSuccess(t *testing.T) {
     actual := MakeSingleLinkedList()
     actual.AddNode("Test0")
     actual.Swap(0, 1)
-    assert.Equal(t, 1, actual.Len())
-    assert.Equal(t, "Test0", actual.Head().Value)
+    checkElementsLinkage(t, []string {"Test0"}, actual)
 }
 

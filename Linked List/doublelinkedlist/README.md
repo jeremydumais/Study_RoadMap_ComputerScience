@@ -12,27 +12,26 @@ Package doublelinkedlist contains all the objects of a doubly linked list.
 
 - [type DoubleLinkedList](<#type-doublelinkedlist>)
   - [func MakeDoubleLinkedList() DoubleLinkedList](<#func-makedoublelinkedlist>)
-- [type Node](<#type-node>)
 
 
-## type [DoubleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/doublelinkedlist/double_linked_list.go#L9-L66>)
+## type [DoubleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/doublelinkedlist/double_linked_list.go#L13-L70>)
 
 DoubleLinkedList is the interface to the double linked list structure. A double linked list is a type of linked list in which each node has a previous and a next link to the corresponding node in the list.
 
 ```go
 type DoubleLinkedList interface {
     // Return the first node of the list. If the list is empty nil will be returned.
-    Head() Node
+    Head() nodes.FullNode
 
     // Return the last node of the list. If the list is empty nil will be returned.
-    Tail() Node
+    Tail() nodes.FullNode
 
     // Return the number of nodes in the list.
     Len() int
 
     // Return a node at a specific index. The first element would be the index
     // zero.
-    GetNode(index int) (Node, error)
+    GetNode(index int) (nodes.FullNode, error)
 
     // Return true if the list has no element and false if the list contains at
     // least one element.
@@ -80,35 +79,13 @@ type DoubleLinkedList interface {
 }
 ```
 
-### func [MakeDoubleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/doublelinkedlist/double_linked_list.go#L75>)
+### func [MakeDoubleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/doublelinkedlist/double_linked_list.go#L79>)
 
 ```go
 func MakeDoubleLinkedList() DoubleLinkedList
 ```
 
 MakeDoubleLinkedList is the constructor of the DoubleLinkedList struct.
-
-## type [Node](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/doublelinkedlist/node.go#L6-L20>)
-
-Node is the interface of the node structure. This represent a node item in the list.
-
-```go
-type Node interface {
-    // Return the previous node. If there is no previous node the value returned
-    // is nil.
-    Prev() Node
-
-    // Return the next node. If there is no next node the value returned
-    // is nil.
-    Next() Node
-
-    // Return the value of the node as a string.
-    Value() string
-
-    // Change the value of the node with the value passed in argument.
-    SetValue(value string)
-}
-```
 
 
 

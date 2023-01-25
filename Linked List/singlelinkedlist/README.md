@@ -10,40 +10,28 @@ Package singlelinkedlist contains all the objects of a singly linked list.
 
 ## Index
 
-- [type Node](<#type-node>)
 - [type SingleLinkedList](<#type-singlelinkedlist>)
   - [func MakeSingleLinkedList() SingleLinkedList](<#func-makesinglelinkedlist>)
 
 
-## type [Node](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlelinkedlist/single_linked_list.go#L10-L13>)
-
-Node This represent a node item in the list.
-
-```go
-type Node struct {
-    Next  *Node
-    Value string
-}
-```
-
-## type [SingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlelinkedlist/single_linked_list.go#L18-L72>)
+## type [SingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlelinkedlist/single_linked_list.go#L13-L67>)
 
 SingleLinkedList is the interface to the single linked list structure. A single linked list is a type of linked list in which each node has only one link to the next node in the list.
 
 ```go
 type SingleLinkedList interface {
     // Return the first node of the list. If the list is empty nil will be returned.
-    Head() *Node
+    Head() nodes.ForwardNode
 
     // Return the last node of the list. If the list is empty nil will be returned.
-    Tail() *Node
+    Tail() nodes.ForwardNode
 
     // Return the number of nodes in the list.
     Len() int
 
     // Return a node at a specific index. The first element would be the index
     // zero.
-    GetNode(index int) (*Node, error)
+    GetNode(index int) (nodes.ForwardNode, error)
 
     // Return true if the list has no element and false if the list contains at
     // least one element.
@@ -88,7 +76,7 @@ type SingleLinkedList interface {
 }
 ```
 
-### func [MakeSingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlelinkedlist/single_linked_list.go#L82>)
+### func [MakeSingleLinkedList](<https://github.com/jeremydumais/Study_RoadMap_ComputerScience/blob/main/Linked List/singlelinkedlist/single_linked_list.go#L77>)
 
 ```go
 func MakeSingleLinkedList() SingleLinkedList
